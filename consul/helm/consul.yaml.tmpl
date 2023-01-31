@@ -1,0 +1,78 @@
+# Configure global settings in this section.
+global:
+  name: consul
+  # Name of the datacenter agents should register as.
+  datacenter: ${ datacenter_name }
+  # Bootstrap ACLs within Consul. This is highly recommended.
+  acls:
+    manageSystemACLs: true
+    %{ if consul_is_primary_dc }
+    createReplicationToken: true
+    %{ else }
+    replicationToken:
+      secretName: consul-federation
+      secretKey: replicationToken
+    %{ endif }
+
+  # Gossip encryption
+  gossipEncryption:
+    %{ if consul_is_primary_dc }
+    autoGenerate: true
+    %{ else }
+    secretName: consul-federation
+    secretKey: gossipEncryptionKey
+    %{ endif }
+  tls:
+    enabled: true
+
+    %{ if consul_is_primary_dc }
+    %{ else }
+    caCert:
+      secretName: consul-federation
+      secretKey: caCert
+    caKey:
+      secretName: consul-federation
+      secretKey: caKey
+    %{ endif }
+
+  federation:
+    enabled: true
+    %{ if consul_is_primary_dc }
+    createFederationSecret: true
+    %{ else }
+    primaryDatacenter: ${ primary_datacenter_name }
+    k8sAuthMethodHost: https://${ k8s_host }
+    %{ endif }
+
+# Configure your Consul servers in this section.
+server:
+  # Specify three servers that wait until all are healthy to bootstrap the Consul cluster.
+  replicas: 3
+  %{ if consul_is_primary_dc}
+  %{ else }
+  extraVolumes:
+    - type: secret
+      name: consul-federation
+      items:
+        - key: serverConfigJSON
+          path: config.json
+      load: true
+  %{ endif }
+
+# Enable and configure the Consul UI.
+ui:
+  enabled: true
+  service:
+    type: LoadBalancer
+# Enable Consul connect pod injection
+connectInject:
+  enabled: true
+  default: false
+controller:
+  enabled: true
+meshGateway:
+  enabled: true
+ingressGateways:
+  enabled: true
+  service:
+    type: LoadBalancer

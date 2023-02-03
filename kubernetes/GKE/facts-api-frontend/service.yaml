@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: facts-api-frontend
+spec:
+  selector:
+    app: facts-api-frontend
+  ports:
+  - port: 8000
+    targetPort: 8000

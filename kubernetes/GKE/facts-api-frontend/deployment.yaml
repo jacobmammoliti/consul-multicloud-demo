@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facts-api-frontend
+spec:
+  selector:
+    matchLabels:
+      app: facts-api-frontend
+  template:
+    metadata:
+      labels:
+        app: facts-api-frontend
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/connect-service-upstreams": "facts-api-backend:3000:gcp"
+    spec:
+      serviceAccount: facts-api-frontend
+      containers:
+      - name: facts-api-frontend
+        image: jacobmammoliti/facts-api-frontend
+        ports:
+        - containerPort: 8000
+        env:
+        - name: CLOUD
+          value: "GCP"
+        - name: API_ENDPOINT
+          value: "127.0.0.1"
+        - name: API_PORT
+          value: "3000"
+        - name: API_SERVICE
+          value: "NUMBERS"

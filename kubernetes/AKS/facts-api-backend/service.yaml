@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: facts-api-backend
+spec:
+  selector:
+    app: facts-api-backend
+  ports:
+  - port: 3000
+    targetPort: 3000

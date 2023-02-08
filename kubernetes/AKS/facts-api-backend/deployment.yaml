@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facts-api-backend
+spec:
+  selector:
+    matchLabels:
+      app: facts-api-backend
+  template:
+    metadata:
+      labels:
+        app: facts-api-backend
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+    spec:
+      serviceAccount: facts-api-backend
+      containers:
+      - name: facts-api-backend
+        image: jacobmammoliti/facts-api-backend
+        ports:
+        - containerPort: 3000

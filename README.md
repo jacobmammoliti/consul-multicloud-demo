@@ -3,6 +3,9 @@ This repository contains Terraform code to deploy a Google Kubernetes Engine (GK
 
 > **Note:** The Terraform in this repo uses the `kubernetes_secret` resource and data resource which is strongly not recommended in a real world deployment since it will store the secret values in plaintext in state. This is only used in the demo to ease the deployment of the Consul clusters.
 
+## Architecture
+![Architecture](images/architecture.png)
+
 ## Requirements
 
 ### Google Cloud Platform (GCP)

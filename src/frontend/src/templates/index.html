@@ -18,6 +18,12 @@
                 font-weight: bold;
                 padding: 10px;
             }
+            .top-bar-aws {
+                background-color: #FF9900;
+                color: #FFF;
+                font-weight: bold;
+                padding: 10px;
+            }
         </style>
     </head>
     <body>
@@ -27,6 +33,9 @@
         {% elif cloud == "azure" %}
         <div class="top-bar-azure">
             Running in Microsoft Azure
+        {% elif cloud == "aws" %}
+        <div class="top-bar-aws">
+            Running in Amazon Web Services
         {% endif %}
         </div>
         <div class="container w-50 mt-5">

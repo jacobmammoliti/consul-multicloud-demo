@@ -22,6 +22,7 @@ job "facts-api-frontend" {
             upstreams {
               destination_name = "facts-api-backend"
               local_bind_port  = 3000
+              datacenter       = "aws-west"
             }
           }
         }
@@ -36,7 +37,9 @@ job "facts-api-frontend" {
       }
 
       env {
-        CLOUD = "AWS"
+        CLOUD        = "AWS"
+        API_ENDPOINT = "${NOMAD_UPSTREAM_IP_facts_api_backend}"
+        API_PORT     = "${NOMAD_UPSTREAM_PORT_facts_api_backend}"
       }
     }
   }
